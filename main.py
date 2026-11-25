@@ -24,6 +24,8 @@ def main():
     if "\n" in LINE or LINE != LINE.strip():
         sys.exit("line must be a single line with no surrounding space")
     data = (LINE + "\n").encode("utf-8")
+    if data.count(b"\n") != 1:
+        sys.exit("entry must be exactly one line ending in a single newline")
     os.makedirs(out_dir, exist_ok=True)
     with open(path, "wb") as f:
         f.write(data)
@@ -31,7 +33,7 @@ def main():
     with open(path, "rb") as f:
         if f.read() != data:
             sys.exit("read-back mismatch")
-    print(f"wrote {len(data)} bytes to {path}")
+    print(f"wrote {len(data)} bytes ({len(LINE)} chars) to {path}")
 
 
 if __name__ == "__main__":
